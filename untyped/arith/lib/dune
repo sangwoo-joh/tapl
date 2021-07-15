@@ -4,4 +4,6 @@
 (ocamllex lexer)
 
 (library
- (name arith))
+ (name arith)
+ (preprocess
+  (pps ppx_deriving.show)))
