@@ -43,5 +43,5 @@ and process_command = function
       process_file f
   | S.Eval (_, t) ->
       let t = E.eval t in
-      F.fprintf F.std_formatter "@[<hv>%a@.@]" S.pp_term t ;
+      F.fprintf F.std_formatter "@[<hv>%a@]" S.pp_term t ;
       ()
