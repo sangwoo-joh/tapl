@@ -18,7 +18,7 @@ let open_file file =
 
 let parse_file file =
   let chan = open_file file in
-  let lexbuf = Lexing.from_channel ~with_positions:true chan in
+  let lexbuf = Lexer.ready file chan in
   let ast =
     try Parser.toplevel Lexer.main lexbuf
     with Parsing.Parse_error -> Error.error_at (Lexer.annot_of lexbuf) "Parse error"

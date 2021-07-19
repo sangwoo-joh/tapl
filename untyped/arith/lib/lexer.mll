@@ -91,6 +91,12 @@ let add_string ch =
 
 let get_string () = Bytes.sub_string !string_buffer 0 !string_end
 
+let ready filename chan =
+  (* Don't know why, but even ~with_positions:true does not give me a
+     proper file name in pos_fname ... *)
+  let lexbuf = Lexing.from_channel chan in
+  Lexing.set_filename lexbuf filename ;
+  lexbuf
 }
 
 let blank = [' ' '\009' '\012' '\t']+
