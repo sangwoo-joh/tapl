@@ -77,8 +77,6 @@ let pp_context fmt (ctx : context) =
 
 let lambda_char = "λ"
 
-let is_small = function Variable _ -> true | Abstraction _ | Application _ -> false
-
 let rec pp_term fmt ~ctx term =
   match term with
   | Abstraction {binder; body; _} ->
