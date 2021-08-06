@@ -1,0 +1,2 @@
+(* iszero 0 *)
+(lambda m. m (lambda x. (lambda t. lambda f. f)) (lambda t. lambda f. t)) (lambda s. lambda z. z);

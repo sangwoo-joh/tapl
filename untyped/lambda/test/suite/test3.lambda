@@ -1,0 +1,2 @@
+(* and true false *)
+(lambda b. lambda c. b c (lambda t. lambda f. f)) (lambda t. lambda f. t) (lambda t. lambda f. f);

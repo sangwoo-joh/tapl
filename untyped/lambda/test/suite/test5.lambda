@@ -1,0 +1,2 @@
+(* test true v w *)
+(lambda l. lambda m. lambda n. l m n) (lambda t. lambda f. t) (lambda v. v) (lambda w. w);

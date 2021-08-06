@@ -1,0 +1,2 @@
+(* Application to identity function *)
+(lambda k. k) (lambda z. z z z);
