@@ -94,10 +94,10 @@ and pp_term_app fmt ~outer ~ctx term =
       F.fprintf fmt "@[<hov 0>%a %a@]" (pp_term_app ~outer:false ~ctx) lhs
         (pp_term_app ~outer:false ~ctx) rhs
   | Abstraction _ | Variable _ ->
-      pp_term_var fmt ~outer ~ctx term
+      pp_atomic_term fmt ~outer ~ctx term
 
 
-and pp_term_var fmt ~outer ~ctx term =
+and pp_atomic_term fmt ~outer ~ctx term =
   match term with
   | Variable {index; len_ctx; annot} ->
       if length_of ctx <> len_ctx then
