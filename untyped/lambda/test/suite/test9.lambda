@@ -1,0 +1,5 @@
+(* Textbook example *)
+(* (λ. 1 0 2) (λ. 0)  ---> 0 (λ. 0) 1   (not 1 (λ. 0) 2 !) *)
+#k;
+#w;
+(lambda x. w x k) (lambda x. x);
