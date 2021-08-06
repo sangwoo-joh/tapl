@@ -106,3 +106,13 @@ and pp_term_var fmt ~outer ~ctx term =
       else F.fprintf fmt "%s" (name_of_index annot ctx index)
   | Abstraction _ | Application _ ->
       F.fprintf fmt "(%a)" (pp_term ~outer ~ctx) term
+
+
+let rec pp_de_bruijn fmt term =
+  match term with
+  | Variable {index; _} ->
+      F.fprintf fmt "%i" index
+  | Abstraction {body; _} ->
+      F.fprintf fmt "λ. %a" pp_de_bruijn body
+  | Application {lhs; rhs; _} ->
+      F.fprintf fmt "(%a %a)" pp_de_bruijn lhs pp_de_bruijn rhs
