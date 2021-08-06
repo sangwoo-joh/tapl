@@ -3,10 +3,13 @@ open Lambda
 let args =
   [ ( "-I"
     , Arg.String (fun file -> Driver.search_path := file :: !Driver.search_path)
-    , "Append a directory to the search path" ) ]
+    , "Append a directory to the search path" )
+  ; ( "-v"
+    , Arg.Set Lambda.Option.verbose
+    , "Verbosely print each step of evaluation in De Bruijn representation" ) ]
 
 
-let usage_msg = "[-I <dir>]* ... <file>"
+let usage_msg = "[-v] [-I <dir>]* ... <file>"
 
 let parse_args () =
   let file = ref (None : string option) in
