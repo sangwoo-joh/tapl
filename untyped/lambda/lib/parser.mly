@@ -76,13 +76,13 @@ Command:
     {
       fun ctx -> (let t = $1 ctx in Eval(annot_of t, t)), ctx
     }
-  | LOWERCASE_ID Binder
+  | Binder LOWERCASE_ID
     {
-      fun ctx -> ((Bind ($1.annot, $1.value, $2 ctx)), add_name ctx $1.value)
+      fun ctx -> ((Bind ($2.annot, $2.value, $1 ctx)), add_name ctx $2.value)
     }
 
 Binder:
-  | SLASH
+  | HASH
     {
       fun _ctx -> NameBind
     }
