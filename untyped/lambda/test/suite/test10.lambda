@@ -1,0 +1,2 @@
+(* plus *)
+lambda m. lambda n. lambda s. lambda z. m s (n z s);
