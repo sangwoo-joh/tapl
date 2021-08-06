@@ -5,4 +5,5 @@
 (ocamllex lexer)
 
 (library
- (name lambda))
+ (name lambda)
+ (libraries ANSITerminal))

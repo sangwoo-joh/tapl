@@ -40,4 +40,10 @@ module Error = struct
   let warning s = F.fprintf F.std_formatter "Warning: %s\n" s
 
   let warning_at annot s = F.fprintf F.std_formatter "Warning at %a: %s\n" pp_annot annot s
+
+  let debug_color = ANSITerminal.[Foreground Yellow]
+
+  let debug s =
+    let s = ANSITerminal.sprintf debug_color "%s\n" s in
+    F.fprintf F.err_formatter "%s" s
 end
