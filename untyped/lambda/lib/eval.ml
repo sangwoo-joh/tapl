@@ -22,11 +22,11 @@ let shift diff term =
 
 
 (** The only slightly subtle point is that reducing a redex "uses up"
-   the bound variable: when we reduce ((\x.t) v) to [x|->v] t, the
+   the bound variable: when we reduce ((λ x.t) v) to [x|->v] t, the
    bound variable x disappears in the process. Thus, we will need to
    renumber the variables of the result of substitution to take into
    account the fact that x is no longer part of the context. For
-   example, (\.1 0 2) (\.0) --> 0 (\.0) 1, not 1 (\.0) 2.
+   example, (λ .1 0 2) (λ .0) --> 0 (λ .0) 1, not 1 (λ .0) 2.
 
    Similarly, we need to shift the variables in v up by one before
    substituting into t, since t is defined in a larger context than v.
