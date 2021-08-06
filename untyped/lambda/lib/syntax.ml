@@ -118,8 +118,7 @@ let rec pp_de_bruijn fmt term =
 and pp_de_bruijn_app fmt term =
   match term with
   | Application {lhs; rhs; _} ->
-      let pp = pp_de_bruijn_app in
-      F.fprintf fmt "@[<hov 0>%a %a@]" pp lhs pp rhs
+      F.fprintf fmt "@[<hov 0>%a %a@]" pp_de_bruijn_app lhs pp_de_bruijn_app rhs
   | Abstraction _ | Variable _ ->
       pp_de_bruijn_atomic fmt term
 
