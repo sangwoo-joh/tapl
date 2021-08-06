@@ -33,7 +33,7 @@ let process_command ctx cmd =
   match cmd with
   | S.Eval (_, t) ->
       let t = E.eval ctx t in
-      F.fprintf F.std_formatter "@[<hv>%a@]" (S.pp_term ~outer:true ~ctx) t ;
+      F.fprintf F.std_formatter "@[<hv>%a@]" (S.pp_term ~ctx) t ;
       ctx
   | S.Bind (_, x, binding) ->
       S.bind ctx x binding

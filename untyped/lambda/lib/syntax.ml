@@ -79,25 +79,24 @@ let lambda_char = "λ"
 
 let is_small = function Variable _ -> true | Abstraction _ | Application _ -> false
 
-let rec pp_term fmt ~outer ~ctx term =
+let rec pp_term fmt ~ctx term =
   match term with
   | Abstraction {binder; body; _} ->
       let ctx, x = pick_fresh ctx binder in
-      F.fprintf fmt "%s %s. %a" lambda_char x (pp_term ~outer ~ctx) body
+      F.fprintf fmt "%s %s. %a" lambda_char x (pp_term ~ctx) body
   | Variable _ | Application _ ->
-      pp_term_app fmt ~outer ~ctx term
+      pp_term_app fmt ~ctx term
 
 
-and pp_term_app fmt ~outer ~ctx term =
+and pp_term_app fmt ~ctx term =
   match term with
   | Application {lhs; rhs; _} ->
-      F.fprintf fmt "@[<hov 0>%a %a@]" (pp_term_app ~outer:false ~ctx) lhs
-        (pp_term_app ~outer:false ~ctx) rhs
+      F.fprintf fmt "@[<hov 0>%a %a@]" (pp_term_app ~ctx) lhs (pp_term_app ~ctx) rhs
   | Abstraction _ | Variable _ ->
-      pp_atomic_term fmt ~outer ~ctx term
+      pp_atomic_term fmt ~ctx term
 
 
-and pp_atomic_term fmt ~outer ~ctx term =
+and pp_atomic_term fmt ~ctx term =
   match term with
   | Variable {index; len_ctx; annot} ->
       if length_of ctx <> len_ctx then
@@ -105,29 +104,29 @@ and pp_atomic_term fmt ~outer ~ctx term =
         Error.error_at annot msg
       else F.fprintf fmt "%s" (name_of_index annot ctx index)
   | Abstraction _ | Application _ ->
-      F.fprintf fmt "(%a)" (pp_term ~outer ~ctx) term
+      F.fprintf fmt "(%a)" (pp_term ~ctx) term
 
 
-let rec pp_de_bruijn fmt ~outer term =
+let rec pp_de_bruijn fmt term =
   match term with
   | Abstraction {body; _} ->
-      F.fprintf fmt "%s. %a" lambda_char (pp_de_bruijn ~outer) body
+      F.fprintf fmt "%s. %a" lambda_char pp_de_bruijn body
   | Variable _ | Application _ ->
-      pp_de_bruijn_app fmt ~outer term
+      pp_de_bruijn_app fmt term
 
 
-and pp_de_bruijn_app fmt ~outer term =
+and pp_de_bruijn_app fmt term =
   match term with
   | Application {lhs; rhs; _} ->
-      let pp = pp_de_bruijn_app ~outer:false in
+      let pp = pp_de_bruijn_app in
       F.fprintf fmt "@[<hov 0>%a %a@]" pp lhs pp rhs
   | Abstraction _ | Variable _ ->
-      pp_de_bruijn_atomic fmt ~outer term
+      pp_de_bruijn_atomic fmt term
 
 
-and pp_de_bruijn_atomic fmt ~outer term =
+and pp_de_bruijn_atomic fmt term =
   match term with
   | Variable {index; _} ->
       F.fprintf fmt "%i" index
   | Abstraction _ | Application _ ->
-      F.fprintf fmt "(%a)" (pp_de_bruijn ~outer) term
+      F.fprintf fmt "(%a)" pp_de_bruijn term
