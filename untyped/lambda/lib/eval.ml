@@ -78,9 +78,12 @@ let rec eval0 ctx term =
       raise No_rule_applies
 
 
-let rec eval ctx term =
+let rec eval ?(start = true) ctx term =
+  let start_nl = if start then "\n" else "" in
+  if !Option.de_bruijn then
+    Util.Error.debug (Format.asprintf "%s→  %a" start_nl pp_de_bruijn term) ;
+  if !Option.lambda then Util.Error.debug (Format.asprintf "%s→  %a" start_nl (pp_term ~ctx) term) ;
   try
-    if !Option.verbose then Util.Error.debug (Format.asprintf " →  %a" pp_de_bruijn term) ;
     let term = eval0 ctx term in
-    eval ctx term
+    eval ctx term ~start:false
   with No_rule_applies -> term

@@ -4,9 +4,12 @@ let args =
   [ ( "-I"
     , Arg.String (fun file -> Driver.search_path := file :: !Driver.search_path)
     , "Append a directory to the search path" )
-  ; ( "-v"
-    , Arg.Set Lambda.Option.verbose
-    , "Verbosely print each step of evaluation in De Bruijn representation" ) ]
+  ; ( "-d"
+    , Arg.Set Lambda.Option.de_bruijn
+    , "Verbosely print each step of evaluation in De Bruijn representation" )
+  ; ( "-l"
+    , Arg.Set Lambda.Option.lambda
+    , "Verbosely print each step of evaluation in Lambda representation" ) ]
 
 
 let usage_msg = "[-v] [-I <dir>]* ... <file>"

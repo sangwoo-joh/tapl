@@ -1,1 +1,3 @@
-let verbose = ref false
+let de_bruijn = ref false
+
+let lambda = ref false
