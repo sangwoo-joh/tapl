@@ -27,6 +27,8 @@ let annot_of = function
       annot
 
 
+let is_application = function Application _ -> true | _ -> false
+
 (** functions for pretty-printing *)
 let length_of (ctx : context) = List.length ctx
 
@@ -89,7 +91,18 @@ let rec pp_term fmt ~ctx term =
 and pp_term_app fmt ~ctx term =
   match term with
   | Application {lhs; rhs; _} ->
-      F.fprintf fmt "@[<hov 0>%a %a@]" (pp_term_app ~ctx) lhs (pp_term_app ~ctx) rhs
+      let pp =
+        match (is_application lhs, is_application rhs) with
+        | true, true ->
+            F.fprintf fmt "@[<hov 0>(%a) (%a)@]"
+        | true, false ->
+            F.fprintf fmt "@[<hov 0>%a %a@]"
+        | false, true ->
+            F.fprintf fmt "@[<hov 0>%a (%a)@]"
+        | false, false ->
+            F.fprintf fmt "@[<hov 0>%a %a@]"
+      in
+      pp (pp_term_app ~ctx) lhs (pp_term_app ~ctx) rhs
   | Abstraction _ | Variable _ ->
       pp_atomic_term fmt ~ctx term
 
@@ -116,7 +129,18 @@ let rec pp_de_bruijn fmt term =
 and pp_de_bruijn_app fmt term =
   match term with
   | Application {lhs; rhs; _} ->
-      F.fprintf fmt "@[<hov 0>%a %a@]" pp_de_bruijn_app lhs pp_de_bruijn_app rhs
+      let pp =
+        match (is_application lhs, is_application rhs) with
+        | true, true ->
+            F.fprintf fmt "@[<hov 0>(%a) (%a)@]"
+        | true, false ->
+            F.fprintf fmt "@[<hov 0>%a %a@]"
+        | false, true ->
+            F.fprintf fmt "@[<hov 0>%a (%a)@]"
+        | false, false ->
+            F.fprintf fmt "@[<hov 0>%a %a@]"
+      in
+      pp pp_de_bruijn_app lhs pp_de_bruijn_app rhs
   | Abstraction _ | Variable _ ->
       pp_de_bruijn_atomic fmt term
 
