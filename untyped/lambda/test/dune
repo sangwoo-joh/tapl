@@ -1,2 +1,25 @@
-(test
- (name lambda))
+(* -*- tuareg -*- *)
+let suite = "suite"
+
+let tc =
+  Sys.readdir suite
+  |> Array.to_list
+  |> List.sort String.compare
+  |> List.map Filename.remove_extension
+
+
+let stanza_fmt : ('a, 'b, 'c, 'd, 'e, 'f) format6 =
+  {|
+(rule
+  (with-stdout-to %s.output (run ../bin/main.exe ./suite/%s.lambda)))
+
+(rule
+  (alias runtest)
+  (action (diff expected/%s %s.output)))
+|}
+
+
+let stanzas = List.map (fun tc_name -> Printf.sprintf stanza_fmt tc_name tc_name tc_name tc_name) tc
+
+;;
+Jbuild_plugin.V1.send (String.concat "\n" stanzas)
