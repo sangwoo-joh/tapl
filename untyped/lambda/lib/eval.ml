@@ -80,7 +80,8 @@ let rec eval0 ctx term =
 
 let rec eval ctx term =
   try
-    if !Option.verbose then Util.Error.debug (Format.asprintf " →  %a" pp_de_bruijn term) ;
+    if !Option.verbose then
+      Util.Error.debug (Format.asprintf " →  %a" (pp_de_bruijn ~outer:true) term) ;
     let term = eval0 ctx term in
     eval ctx term
   with No_rule_applies -> term

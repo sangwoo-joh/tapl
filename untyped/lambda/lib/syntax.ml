@@ -108,11 +108,26 @@ and pp_atomic_term fmt ~outer ~ctx term =
       F.fprintf fmt "(%a)" (pp_term ~outer ~ctx) term
 
 
-let rec pp_de_bruijn fmt term =
+let rec pp_de_bruijn fmt ~outer term =
+  match term with
+  | Abstraction {body; _} ->
+      F.fprintf fmt "%s. %a" lambda_char (pp_de_bruijn ~outer) body
+  | Variable _ | Application _ ->
+      pp_de_bruijn_app fmt ~outer term
+
+
+and pp_de_bruijn_app fmt ~outer term =
+  match term with
+  | Application {lhs; rhs; _} ->
+      let pp = pp_de_bruijn_app ~outer:false in
+      F.fprintf fmt "@[<hov 0>%a %a@]" pp lhs pp rhs
+  | Abstraction _ | Variable _ ->
+      pp_de_bruijn_atomic fmt ~outer term
+
+
+and pp_de_bruijn_atomic fmt ~outer term =
   match term with
   | Variable {index; _} ->
       F.fprintf fmt "%i" index
-  | Abstraction {body; _} ->
-      F.fprintf fmt "λ. %a" pp_de_bruijn body
-  | Application {lhs; rhs; _} ->
-      F.fprintf fmt "(%a %a)" pp_de_bruijn lhs pp_de_bruijn rhs
+  | Abstraction _ | Application _ ->
+      F.fprintf fmt "(%a)" (pp_de_bruijn ~outer) term
