@@ -92,15 +92,8 @@ and pp_term_app fmt ~ctx term =
   match term with
   | Application {lhs; rhs; _} ->
       let pp =
-        match (is_application lhs, is_application rhs) with
-        | true, true ->
-            F.fprintf fmt "@[<hov 0>(%a) (%a)@]"
-        | true, false ->
-            F.fprintf fmt "@[<hov 0>%a %a@]"
-        | false, true ->
-            F.fprintf fmt "@[<hov 0>%a (%a)@]"
-        | false, false ->
-            F.fprintf fmt "@[<hov 0>%a %a@]"
+        if is_application rhs then F.fprintf fmt "@[<hov 0>%a (%a)@]"
+        else F.fprintf fmt "@[<hov 0>%a %a@]"
       in
       pp (pp_term_app ~ctx) lhs (pp_term_app ~ctx) rhs
   | Abstraction _ | Variable _ ->
@@ -130,15 +123,8 @@ and pp_de_bruijn_app fmt term =
   match term with
   | Application {lhs; rhs; _} ->
       let pp =
-        match (is_application lhs, is_application rhs) with
-        | true, true ->
-            F.fprintf fmt "@[<hov 0>(%a) (%a)@]"
-        | true, false ->
-            F.fprintf fmt "@[<hov 0>%a %a@]"
-        | false, true ->
-            F.fprintf fmt "@[<hov 0>%a (%a)@]"
-        | false, false ->
-            F.fprintf fmt "@[<hov 0>%a %a@]"
+        if is_application rhs then F.fprintf fmt "@[<hov 0>%a (%a)@]"
+        else F.fprintf fmt "@[<hov 0>%a %a@]"
       in
       pp pp_de_bruijn_app lhs pp_de_bruijn_app rhs
   | Abstraction _ | Variable _ ->

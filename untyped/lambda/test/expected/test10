@@ -1,1 +1,1 @@
-λ m. λ n. λ s. λ z. (m s) (n z s)
+λ m. λ n. λ s. λ z. m s (n z s)
